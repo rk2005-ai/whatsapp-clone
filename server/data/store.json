@@ -1,0 +1,187 @@
+{
+  "users": [
+    {
+      "_id": "bce5c633c6d946b16038b7b8",
+      "about": "Hey there! I am using WhatsApp.",
+      "avatar": "",
+      "isOnline": false,
+      "lastSeen": "2026-10-10T09:34:28.592Z",
+      "createdAt": "2026-10-10T09:12:32.747Z",
+      "updatedAt": "2026-10-10T09:34:28.593Z",
+      "phone": "+911234567899",
+      "name": "rahul",
+      "id": "bce5c633c6d946b16038b7b8"
+    },
+    {
+      "_id": "7e62e2982adf1aa9f6b89b33",
+      "about": "Hey there! I am using WhatsApp.",
+      "avatar": "",
+      "isOnline": false,
+      "lastSeen": "2026-10-10T10:02:12.117Z",
+      "createdAt": "2026-10-10T09:15:28.203Z",
+      "updatedAt": "2026-10-10T10:02:12.118Z",
+      "phone": "+919876543211",
+      "name": "Rahul",
+      "id": "7e62e2982adf1aa9f6b89b33"
+    },
+    {
+      "_id": "116f30090299849b28308403",
+      "about": "Hey there! I am using WhatsApp.",
+      "avatar": "",
+      "isOnline": false,
+      "lastSeen": "2026-10-10T10:07:10.520Z",
+      "createdAt": "2026-10-10T09:16:34.632Z",
+      "updatedAt": "2026-10-10T10:07:10.863Z",
+      "phone": "+919876543210",
+      "name": "rohan",
+      "id": "116f30090299849b28308403"
+    }
+  ],
+  "conversations": [
+    {
+      "_id": "1f881ad647633f90823a03ea",
+      "isGroup": false,
+      "name": "",
+      "lastMessage": "2edf191887daea45675c0674",
+      "createdAt": "2026-10-10T09:18:07.666Z",
+      "updatedAt": "2026-10-10T09:58:14.265Z",
+      "participants": [
+        "7e62e2982adf1aa9f6b89b33",
+        "116f30090299849b28308403"
+      ],
+      "createdBy": "116f30090299849b28308403",
+      "id": "1f881ad647633f90823a03ea"
+    }
+  ],
+  "messages": [
+    {
+      "_id": "1970c09fc9de1dbc02411834",
+      "type": "text",
+      "text": "hi",
+      "attachmentUrl": "",
+      "replyTo": null,
+      "editedAt": null,
+      "deletedForEveryone": false,
+      "deliveredTo": [
+        "116f30090299849b28308403"
+      ],
+      "readBy": [],
+      "reactions": [],
+      "createdAt": "2026-10-10T09:18:14.181Z",
+      "updatedAt": "2026-10-10T09:18:14.181Z",
+      "conversation": "1f881ad647633f90823a03ea",
+      "sender": "116f30090299849b28308403"
+    },
+    {
+      "_id": "2810cfb53e9bd795f26343d3",
+      "type": "text",
+      "text": "hi name rahul",
+      "attachmentUrl": "",
+      "replyTo": null,
+      "editedAt": null,
+      "deletedForEveryone": false,
+      "deliveredTo": [
+        "7e62e2982adf1aa9f6b89b33"
+      ],
+      "readBy": [],
+      "reactions": [],
+      "createdAt": "2026-10-10T09:20:11.344Z",
+      "updatedAt": "2026-10-10T09:20:11.344Z",
+      "conversation": "1f881ad647633f90823a03ea",
+      "sender": "7e62e2982adf1aa9f6b89b33"
+    },
+    {
+      "_id": "777f5ec6ab40590f658b4fd3",
+      "type": "text",
+      "text": "Hi",
+      "attachmentUrl": "",
+      "replyTo": null,
+      "editedAt": null,
+      "deletedForEveryone": false,
+      "deliveredTo": [
+        "7e62e2982adf1aa9f6b89b33"
+      ],
+      "readBy": [],
+      "reactions": [],
+      "createdAt": "2026-10-10T09:40:25.936Z",
+      "updatedAt": "2026-10-10T09:40:25.936Z",
+      "conversation": "1f881ad647633f90823a03ea",
+      "sender": "7e62e2982adf1aa9f6b89b33"
+    },
+    {
+      "_id": "3b1f58f1671d2b7084659c1d",
+      "type": "voice",
+      "text": "",
+      "attachmentUrl": "",
+      "replyTo": null,
+      "editedAt": null,
+      "deletedForEveryone": true,
+      "deliveredTo": [
+        "7e62e2982adf1aa9f6b89b33"
+      ],
+      "readBy": [],
+      "reactions": [],
+      "createdAt": "2026-10-10T09:42:44.391Z",
+      "updatedAt": "2026-10-10T09:45:28.461Z",
+      "conversation": "1f881ad647633f90823a03ea",
+      "sender": "7e62e2982adf1aa9f6b89b33",
+      "id": "3b1f58f1671d2b7084659c1d"
+    },
+    {
+      "_id": "fbc92cdec111bd9e126a1315",
+      "type": "image",
+      "text": "",
+      "attachmentUrl": "",
+      "replyTo": null,
+      "editedAt": null,
+      "deletedForEveryone": true,
+      "deliveredTo": [
+        "116f30090299849b28308403"
+      ],
+      "readBy": [],
+      "reactions": [],
+      "createdAt": "2026-10-10T09:43:20.892Z",
+      "updatedAt": "2026-10-10T09:45:02.310Z",
+      "conversation": "1f881ad647633f90823a03ea",
+      "sender": "116f30090299849b28308403",
+      "id": "fbc92cdec111bd9e126a1315"
+    },
+    {
+      "_id": "4fad108edc521fe0c07298df",
+      "type": "text",
+      "text": "",
+      "attachmentUrl": "",
+      "replyTo": null,
+      "editedAt": null,
+      "deletedForEveryone": true,
+      "deliveredTo": [
+        "116f30090299849b28308403"
+      ],
+      "readBy": [],
+      "reactions": [],
+      "createdAt": "2026-10-10T09:43:54.975Z",
+      "updatedAt": "2026-10-10T09:45:12.089Z",
+      "conversation": "1f881ad647633f90823a03ea",
+      "sender": "116f30090299849b28308403",
+      "id": "4fad108edc521fe0c07298df"
+    },
+    {
+      "_id": "2edf191887daea45675c0674",
+      "type": "text",
+      "text": "Bol",
+      "attachmentUrl": "",
+      "replyTo": null,
+      "editedAt": null,
+      "deletedForEveryone": false,
+      "deliveredTo": [
+        "7e62e2982adf1aa9f6b89b33"
+      ],
+      "readBy": [],
+      "reactions": [],
+      "createdAt": "2026-10-10T09:58:14.241Z",
+      "updatedAt": "2026-10-10T09:58:14.241Z",
+      "conversation": "1f881ad647633f90823a03ea",
+      "sender": "7e62e2982adf1aa9f6b89b33"
+    }
+  ]
+}

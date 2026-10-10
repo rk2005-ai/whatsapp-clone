@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: whatsapp-web-clone
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: OTP_TTL_MINUTES
+        value: 5
