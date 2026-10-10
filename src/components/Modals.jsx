@@ -407,10 +407,10 @@ export function StoryViewer({ state, id, onClose, onSeen }) {
   const mine = id === 'me';
   const st = mine
     ? { items: state.myStatus }
-    : state.statuses.find((s) => s.id === id);
+    : state.statuses.find((s) => s.id === id || s.contactId === id);
   const owner = mine
     ? state.user
-    : state.contacts.find((c) => c.id === st?.contactId);
+    : state.contacts.find((c) => c.id === st?.contactId || c.userId === st?.contactId || c._id === st?.contactId) || st;
   const [i, setI] = useState(0);
   const [p, setP] = useState(0);
 

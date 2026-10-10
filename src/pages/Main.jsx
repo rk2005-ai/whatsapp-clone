@@ -105,6 +105,19 @@ export default function Main({ state, dispatch, onLogout, onReset }) {
         contacts: Array.from(contactsMap.values()),
         chats: newChats
       }));
+
+      try {
+        const statusRes = await api.getStatuses();
+        if (statusRes) {
+          dispatch((s) => ({
+            ...s,
+            myStatus: statusRes.myStatus || [],
+            statuses: statusRes.statuses || []
+          }));
+        }
+      } catch (e) {
+        console.warn('Could not load statuses:', e);
+      }
     } catch (err) {
       console.warn('Could not refresh conversations from API:', err.message);
     } finally {
@@ -136,6 +149,49 @@ export default function Main({ state, dispatch, onLogout, onReset }) {
 
     return unsub;
   }, [modal, state.user]);
+
+  // Listen for real-time status updates via Socket
+  useEffect(() => {
+    const unsub = subscribeSocket('status:new', (data) => {
+      const myId = String(state.user?._id || state.user?.id);
+      const isMine = String(data.userId) === myId;
+      dispatch((s) => {
+        if (isMine) {
+          return {
+            ...s,
+            myStatus: [...s.myStatus, data.item]
+          };
+        }
+        const existingIdx = s.statuses.findIndex(
+          (st) => st.id === data.userId || st.contactId === data.userId
+        );
+        let updatedStatuses;
+        if (existingIdx >= 0) {
+          updatedStatuses = [...s.statuses];
+          const curr = updatedStatuses[existingIdx];
+          updatedStatuses[existingIdx] = {
+            ...curr,
+            items: [...curr.items, data.item],
+            viewed: false
+          };
+        } else {
+          updatedStatuses = [
+            {
+              id: data.userId,
+              contactId: data.userId,
+              name: data.user?.name || 'Contact',
+              avatar: data.user?.avatar || '',
+              viewed: false,
+              items: [data.item]
+            },
+            ...s.statuses
+          ];
+        }
+        return { ...s, statuses: updatedStatuses };
+      });
+    });
+    return unsub;
+  }, [state.user, dispatch]);
 
   const openChat = async (id) => {
     activeRef.current = id;
@@ -276,11 +332,15 @@ export default function Main({ state, dispatch, onLogout, onReset }) {
     showToast(connected ? 'Call ended' : 'Call ended');
   };
 
-  const seen = (id) =>
+  const seen = (id) => {
     dispatch((s) => ({
       ...s,
-      statuses: s.statuses.map((x) => (x.id === id ? { ...x, viewed: true } : x))
+      statuses: s.statuses.map((x) =>
+        x.id === id || x.contactId === id ? { ...x, viewed: true } : x
+      )
     }));
+    api.viewStatus(id).catch(() => {});
+  };
 
   return (
     <div className={`app wp-${state.settings.wallpaper} ${activeId ? 'show-chat' : ''}`}>
@@ -384,10 +444,14 @@ export default function Main({ state, dispatch, onLogout, onReset }) {
       {modal?.type === 'addStatus' && (
         <AddStatus
           onClose={() => setModal(null)}
-          onAdd={(it) => {
-            dispatch((s) => ({ ...s, myStatus: [...s.myStatus, it] }));
-            setModal(null);
-            showToast('Status posted');
+          onAdd={async (it) => {
+            try {
+              await api.createStatus(it);
+              setModal(null);
+              showToast('Status posted');
+            } catch (err) {
+              showToast(err.message || 'Failed to post status');
+            }
           }}
         />
       )}

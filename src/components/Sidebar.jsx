@@ -29,11 +29,11 @@ export default function Sidebar({ state, dispatch, tab, setTab, activeId, openCh
     .sort((a, b) => (+!!b.c.pinned - +!!a.c.pinned) || lastTs(b.c) - lastTs(a.c));
 
   const unreadTotal = Object.values(chats).filter((c) => c.unread).length;
-  const fresh = statuses.filter((s) => !s.viewed && ct(s.contactId));
-  const viewed = statuses.filter((s) => s.viewed && ct(s.contactId));
+  const fresh = statuses.filter((s) => !s.viewed && (ct(s.contactId) || s.name));
+  const viewed = statuses.filter((s) => s.viewed && (ct(s.contactId) || s.name));
 
   const StatusRow = ({ s }) => {
-    const p = ct(s.contactId); const last = s.items[s.items.length - 1];
+    const p = ct(s.contactId) || s; const last = s.items[s.items.length - 1];
     return <button className="row" onClick={() => setModal({ type: 'story', id: s.id })}><Avatar c={p} size={49} ring={s.viewed ? 'ring-seen' : 'ring-new'} /><div className="grow"><div className="name">{p.name}</div><div className="sub">{listTime(last.ts)}</div></div></button>;
   };
 

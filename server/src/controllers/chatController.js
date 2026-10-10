@@ -2,6 +2,7 @@ import { z } from 'zod';
 import Conversation from '../models/Conversation.js';
 import Message from '../models/Message.js';
 import User from '../models/User.js';
+import Status from '../models/Status.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 export const listUsers = asyncHandler(async (req, res) => {
   const q = String(req.query.q || '').trim();
@@ -70,4 +71,109 @@ export const deleteMessage = asyncHandler(async (req, res) => {
   message.deletedForEveryone = true; message.text = ''; message.attachmentUrl = ''; await message.save();
   req.app.get('io')?.to(String(req.params.id)).emit('message:deleted', { id: message.id, conversationId: req.params.id });
   res.json({ message });
+});
+
+export const listStatuses = asyncHandler(async (req, res) => {
+  const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const statuses = await Status.find({ createdAt: { $gte: cutoff } })
+    .populate('user', 'name phone avatar')
+    .sort({ createdAt: 1 });
+
+  const myId = String(req.user.id || req.user._id);
+  const myItems = [];
+  const userGroups = new Map();
+
+  for (const s of statuses) {
+    const u = s.user || {};
+    const uId = String(u._id || u.id || s.user);
+    const isMine = uId === myId;
+    const item = {
+      id: String(s._id || s.id),
+      text: s.text || '',
+      image: s.image || '',
+      bg: s.bg || '#00a884',
+      ts: new Date(s.createdAt).getTime(),
+      viewed: Array.isArray(s.viewedBy) && s.viewedBy.map(String).includes(myId)
+    };
+
+    if (isMine) {
+      myItems.push(item);
+    } else {
+      if (!userGroups.has(uId)) {
+        userGroups.set(uId, {
+          id: uId,
+          contactId: uId,
+          name: u.name || 'Contact',
+          avatar: u.avatar || '',
+          items: []
+        });
+      }
+      userGroups.get(uId).items.push(item);
+    }
+  }
+
+  const otherStatuses = Array.from(userGroups.values()).map((g) => ({
+    ...g,
+    viewed: g.items.every((it) => it.viewed)
+  }));
+
+  res.json({
+    myStatus: myItems,
+    statuses: otherStatuses
+  });
+});
+
+export const createStatus = asyncHandler(async (req, res) => {
+  const parsed = z.object({
+    text: z.string().trim().max(500).optional(),
+    image: z.string().max(2000000).optional(),
+    bg: z.string().optional()
+  }).safeParse(req.body);
+
+  if (!parsed.success) return res.status(400).json({ message: 'Invalid status data' });
+  const { text = '', image = '', bg = '#00a884' } = parsed.data;
+  if (!text && !image) return res.status(400).json({ message: 'Status must include text or an image' });
+
+  const status = await Status.create({
+    user: req.user._id,
+    text,
+    image,
+    bg,
+    viewedBy: []
+  });
+
+  const populated = await status.populate('user', 'name phone avatar');
+  const statusPayload = {
+    id: String(populated._id),
+    userId: String(req.user._id),
+    user: {
+      _id: String(req.user._id),
+      name: req.user.name,
+      avatar: req.user.avatar
+    },
+    item: {
+      id: String(populated._id),
+      text,
+      image,
+      bg,
+      ts: new Date(populated.createdAt).getTime(),
+      viewed: false
+    }
+  };
+
+  req.app.get('io')?.emit('status:new', statusPayload);
+  res.status(201).json({ status: statusPayload });
+});
+
+export const viewStatus = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const status = await Status.findById(id);
+  if (!status) return res.status(404).json({ message: 'Status not found' });
+  const myId = String(req.user._id);
+  if (!status.viewedBy) status.viewedBy = [];
+  if (!status.viewedBy.map(String).includes(myId)) {
+    status.viewedBy.push(req.user._id);
+    await status.save();
+  }
+  res.json({ ok: true });
 });

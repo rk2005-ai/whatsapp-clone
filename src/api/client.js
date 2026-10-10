@@ -133,5 +133,20 @@ export const api = {
       method: 'DELETE'
     });
     return res.message;
+  },
+
+  async getStatuses() {
+    return request('/api/statuses');
+  },
+
+  async createStatus({ text = '', image = '', bg = '#00a884' }) {
+    return request('/api/statuses', {
+      method: 'POST',
+      body: JSON.stringify({ text, image, bg })
+    });
+  },
+
+  async viewStatus(id) {
+    return request(`/api/statuses/${id}/view`, { method: 'POST' });
   }
 };

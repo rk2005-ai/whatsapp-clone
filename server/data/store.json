@@ -29,12 +29,24 @@
       "about": "Hey there! I am using WhatsApp.",
       "avatar": "",
       "isOnline": false,
-      "lastSeen": "2026-10-10T10:07:10.520Z",
+      "lastSeen": "2026-10-10T10:22:32.182Z",
       "createdAt": "2026-10-10T09:16:34.632Z",
-      "updatedAt": "2026-10-10T10:07:10.863Z",
+      "updatedAt": "2026-10-10T10:22:32.295Z",
       "phone": "+919876543210",
       "name": "rohan",
       "id": "116f30090299849b28308403"
+    },
+    {
+      "_id": "78805961855c0e26522e0e41",
+      "about": "Hey there! I am using WhatsApp.",
+      "avatar": "",
+      "isOnline": true,
+      "lastSeen": "2026-10-10T10:33:04.001Z",
+      "createdAt": "2026-10-10T10:33:03.862Z",
+      "updatedAt": "2026-10-10T10:33:04.002Z",
+      "phone": "+919999988888",
+      "name": "Test User",
+      "id": "78805961855c0e26522e0e41"
     }
   ],
   "conversations": [

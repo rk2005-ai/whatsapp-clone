@@ -245,6 +245,11 @@ async function populateDoc(doc, collectionName, populates) {
         }
         doc.lastMessage = msgDoc;
       }
+    } else if (pPath === 'user') {
+      const u = store.users.find((x) => String(x._id) === String(doc.user?._id || doc.user));
+      if (u) {
+        doc.user = { _id: u._id, name: u.name, phone: u.phone, avatar: u.avatar };
+      }
     }
   }
   return doc;
@@ -378,5 +383,50 @@ export const EmbeddedMessage = {
     store.messages.push(doc);
     saveStore();
     return wrapDoc(doc, 'messages');
+  }
+};
+
+export const EmbeddedStatus = {
+  findOne(query) {
+    loadStore();
+    if (!store.statuses) store.statuses = [];
+    return new SingleQuery(
+      () => {
+        const found = store.statuses.find((s) => matches(s, query));
+        return wrapDoc(found, 'statuses');
+      },
+      (d, pops) => populateDoc(d, 'statuses', pops)
+    );
+  },
+  find(query) {
+    loadStore();
+    if (!store.statuses) store.statuses = [];
+    return new Query(
+      () => store.statuses.filter((s) => matches(s, query)).map((s) => wrapDoc(s, 'statuses')),
+      (doc, populates) => populateDoc(doc, 'statuses', populates)
+    );
+  },
+  async findById(id) {
+    loadStore();
+    if (!store.statuses) store.statuses = [];
+    const found = store.statuses.find((s) => String(s._id) === String(id));
+    return wrapDoc(found, 'statuses');
+  },
+  async create(data) {
+    loadStore();
+    if (!store.statuses) store.statuses = [];
+    const doc = {
+      _id: newId(),
+      text: '',
+      image: '',
+      bg: '#00a884',
+      viewedBy: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...data
+    };
+    store.statuses.push(doc);
+    saveStore();
+    return wrapDoc(doc, 'statuses');
   }
 };
