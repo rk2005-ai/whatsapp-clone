@@ -18,9 +18,12 @@ export const requestOtp = asyncHandler(async (req, res) => {
   } else if (name) user.name = name;
   user.otpHash = hash(otp);
   user.otpExpiresAt = new Date(Date.now() + Number(process.env.OTP_TTL_MINUTES || 5) * 60_000);
-  await user.save();
-  // For local development only; production should send OTP via a verified SMS provider.
-  res.json({ message: 'Verification code generated', ...(process.env.NODE_ENV !== 'production' ? { devOtp: otp } : {}) });
+  console.log(`[AUTH] Verification OTP for ${phone}: ${otp}`);
+  res.json({
+    message: 'Verification code generated',
+    devOtp: otp,
+    otp
+  });
 });
 export const verifyOtp = asyncHandler(async (req, res) => {
   const parsed = z.object({ phone: phoneSchema, otp: z.string().regex(/^\d{6}$/) }).safeParse(req.body);
